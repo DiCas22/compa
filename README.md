@@ -1,6 +1,6 @@
 # Compa
 
-Compa is a CLI tool to losslessly compress text‑heavy files (PDF, TXT, HTML, code) into Zstandard (`.zst`) archives, tag them with human‑readable topics, and provide quick access (list, open, decompress).
+Compa is a CLI tool to losslessly compress text‑heavy files (PDF, TXT, HTML, code) into Zstandard (`.zst`) archives, tag them with human‑readable topics, and provide quick access (compress, list, search, open, decompress).
 
 ## Goals
 
@@ -20,7 +20,7 @@ source venv/bin/activate
 pip install -e .
 
 # system dependencies (Debian/Ubuntu)
-sudo apt install zstd ghostscript
+sudo apt install zstd ghostscript poppler-utils
 ```
 
 ## Usage
@@ -40,6 +40,22 @@ compa compress <file> [--topics TAG1,TAG2] [--level N] [--threads N] [--no-pdf-o
 compa list <topic1,topic2,...>
 ```
 Lists all archives tagged with **all** specified topics.
+
+### search
+```bash
+compa search "<phrase>" [--context N]
+```
+Searches all compressed archives for `<phrase>` and prints matches with context:
+- Decompresses on-the-fly (text files) or uses `pdftotext` for PDF archives.
+- `--context`, `-c`: number of characters around each match (default 50)
+
+Example:
+```bash
+compa search "Better sleep" -c 40
+# Output:
+# book.pdf.zst: "Better sleep is achieved through less noisy ambient..."
+# notes.txt.zst: "You can get a better sleep if you reduce screen time..."
+```
 
 ### open
 ```bash
@@ -63,7 +79,8 @@ compa/
 │   ├── cli.py
 │   ├── compress.py
 │   ├── index_ini.py
-│   └── utils.py
+│   ├── utils.py
+│   └── search.py
 ├── files/            # all .zst archives
 ├── pyproject.toml
 └── README_template.txt
