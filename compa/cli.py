@@ -13,9 +13,10 @@ import typer
 from .compress import compress_file, decompress_file
 from .index_ini import Index
 from .utils import open_with_default_app
+from .search import search_command  # import the search command
 
 app = typer.Typer(no_args_is_help=True)
-idx = Index()                                   # loads ~/.compa/topics.ini
+idx = Index()  # loads ~/.compa/topics.ini
 
 
 # ────────────────────────────────────────────────────────────────────────── #
@@ -82,8 +83,7 @@ def open(
         0,
         "--wait",
         "-w",
-        help="Seconds to wait before deleting. "
-        "0 = wait for user to press ENTER.",
+        help="Seconds to wait before deleting. 0 = wait for user to press ENTER.",
     ),
 ) -> None:
     """
@@ -108,6 +108,12 @@ def open(
             shutil.move(tmp_file, final_path)
             typer.echo(f"Kept temporary copy at {final_path}")
         # else: TemporaryDirectory context removes the file automatically
+
+
+# ────────────────────────────────────────────────────────────────────────── #
+# Search command
+# ────────────────────────────────────────────────────────────────────────── #
+app.command(name="search")(search_command)
 
 
 if __name__ == "__main__":
