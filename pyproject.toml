@@ -1,0 +1,12 @@
+[project]
+name = "compa"
+version = "0.1.0"
+requires-python = ">=3.9"
+
+dependencies = [
+    "zstandard>=0.22",          # ← correct package
+    "typer[all]>=0.9"
+]
+
+[project.scripts]
+compa = "compa.cli:app"
